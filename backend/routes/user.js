@@ -1,9 +1,8 @@
 const express = require("express");
-
 const router = express.Router();
 const zod = require("zod");
 const { User, Account } = require("../db");
-const jwt = require("jsonwebtoken");
+const { JWKS, JWT } = require("jose");
 const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware");
 
@@ -45,12 +44,12 @@ router.post("/signup", async (req, res) => {
     balance: 1 + Math.random() * 10000,
   });
 
-  const token = jwt.sign(
-    {
-      userId,
-    },
-    JWT_SECRET
-  );
+  const payload = {
+    userId,
+  };
+  const token = JWT.sign(payload, JWKS.generateKey("RSA"), {
+    expiresIn: "1h",
+  });
   res.status(200).json({
     message: "User created successfully",
     token: token,
@@ -76,12 +75,12 @@ router.post("/signin", authMiddleware, async (req, res) => {
   });
 
   if (user) {
-    const token = jwt.sign(
-      {
-        userId: user._id,
-      },
-      JWT_SECRET
-    );
+    const payload = {
+      userId: user._id,
+    };
+    const token = JWT.sign(payload, JWKS.generateKey("RSA"), {
+      expiresIn: "1h",
+    });
 
     res.userId = user._id;
     res.json({
@@ -118,33 +117,7 @@ router.put("/update", authMiddleware, async (req, res) => {
   });
 });
 
-// router.get("/bulk", async (req, res) => {
-//   const filter = req.query.filter || "";
-//   const users = await User.find({
-//     $or: [
-//       {
-//         firstName: {
-//           $regex: new RegExp(filter, "i"), // 'i' flag for case-insensitive search
-//         },
-//       },
-//       {
-//         lastName: {
-//           $regex: new RegExp(filter, "i"), // 'i' flag for case-insensitive search
-//         },
-//       },
-//     ],
-//   });
-
-//   res.json({
-//     user: users.map((user) => ({
-//       username: user.username,
-//       firstName: user.firstName,
-//       lastName: user.lastName,
-//       _id: user._id,
-//     })),
-//   });
-// });
-router.get("/bulk",authMiddleware, async (req, res) => {
+router.get("/bulk", authMiddleware, async (req, res) => {
   const filter = req.query.filter || "";
   const currentUser = req.userId;
 
