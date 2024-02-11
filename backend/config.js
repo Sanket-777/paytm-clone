@@ -1,3 +1,4 @@
-JWT_SECRET = "Sanket"
-
-module.export  = {JWT_SECRET};
+//backend/config.js
+module.exports = {
+	JWT_SECRET: "sanket"
+}
