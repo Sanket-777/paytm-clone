@@ -34,7 +34,7 @@ export function Signup() {
                     setPassword(e.target.value)
                 }} label={" Password "} />
                 <Button onPress={async () => {
-                    const response = await axios.post("http://paytm-backend-bay.vercel.app/api/v1/user/signup", {
+                    const response = await axios.post("https://paytm-backend-bay.vercel.app/api/v1/user/signup", {
                         username,
                         firstName,
                         lastName,

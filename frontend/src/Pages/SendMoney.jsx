@@ -15,7 +15,7 @@ export function SendMoney() {
     const [respMessage, Setmessage] = useState("");
 
     const handleTransfer = async () => {
-        const response = await axios.put("http://localhost:3000/api/v1/account/transfer", {
+        const response = await axios.put("https://paytm-backend-bay.vercel.app//api/v1/account/transfer", {
             to: id,
             amount
         }, {
