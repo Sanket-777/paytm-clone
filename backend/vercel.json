@@ -1,20 +1,20 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "./index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "rewrites": [{ "source": "/(.*)", "destination": "src/app.js" }],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    },
-    {
-      "source": "/paytm-frontend-bay.vercel.app/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    }
-  ]
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "./index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "rewrites": [{ "source": "/(.*)", "destination": "src/app.js" }],
+    "routes": [
+      {
+        "src": "/api/v1/user/signin",
+        "methods": ["POST"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
+      }
+    ]
+  }
+  
